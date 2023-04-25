@@ -36,20 +36,6 @@ var baseConfig = {
         config.plugin('provide').use(webpack.ProvidePlugin, [{
             
         }]);
-
-        if (process.env.NODE_ENV === "production" && CONFIG.sentry.enabled) {
-            const SentryPlugin = require('@sentry/webpack-plugin');
-
-            config.plugin('sentry').use(SentryPlugin).tap(options => {
-                options[0] = {
-                    release: process.env.RELEASE_VERSION,
-                    configFile: 'sentry.properties',
-                    include: path.join(__dirname, `../dist/${CONFIG.assetsDir}/js/`),
-                    urlPrefix: `~/${CONFIG.assetsDir}/js`
-                };
-                return options;
-            });
-        }
     },
     css: {
         loaderOptions: {
