@@ -35,6 +35,7 @@
                     size="small"
                     circle
                     icon="el-icon-plus"
+                    :loading="loading"
                     @click="togglePanel"
                 ></el-button>
             </div>
