@@ -30,6 +30,16 @@
 
         <div class="footer">
             <div class="left">
+                <el-button 
+                    class="btn-submit"
+                    size="small"
+                    circle
+                    icon="el-icon-plus"
+                    @click="togglePanel"
+                ></el-button>
+            </div>
+
+            <div class="center">
                 <el-input 
                     class="input"
                     v-model="question"
@@ -50,6 +60,17 @@
                 ></el-button>
             </div>
         </div>
+
+        <Panel 
+            ref="panel"
+            :data.sync="list"
+            @shiftScene="openDrawerScene"
+        ></Panel>
+
+        <DrawerScene
+            ref="DrawerScene"
+            @shift="shiftSceneHandler"
+        ></DrawerScene>
     </div>
 </template>
 
@@ -57,7 +78,14 @@
 import MsgGroup from './js/MsgGroup.js';
 import getAnswer from './js/getAnswer.js';
 
+import Panel from './components/panel.vue';
+import DrawerScene from './components/drawer-scene.vue';
+
 export default {
+    components: {
+        Panel,
+        DrawerScene,
+    },
     data() {
         return {
             question: '',
@@ -68,6 +96,16 @@ export default {
         };
     },
     methods: {
+        togglePanel() {
+            this.$refs.panel.toggleShow();
+        },
+        openDrawerScene() {
+            this.$refs.DrawerScene.open();
+        },
+        shiftSceneHandler(history) {
+            this.list = history;
+        },
+
         getContexts() {
             var list = this.list;
 
@@ -168,6 +206,12 @@ export default {
             padding: .5em;
 
             .left{
+                display: flex;
+                align-items: center;
+                margin-right: .5em;
+            }
+
+            .center{
                 flex: 1;
                 display: flex;
                 align-items: center;
