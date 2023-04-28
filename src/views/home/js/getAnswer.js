@@ -58,10 +58,9 @@ export default function getAnswer(prompt = '', contexts = [], obj = {
         .then(response => {
             if (!response.ok) {
                 response.text().then(res => {
-                    console.log(res);
+                    // console.log(res);
 
-                    console.error(res);
-                    showMsgBox(res, 'error');
+                    // console.error(res);
 
                     obj?.error(res);
 
@@ -104,6 +103,7 @@ export default function getAnswer(prompt = '', contexts = [], obj = {
 
                                         if (jsonData['choices'] !== undefined && jsonData['choices'].length > 0) {
                                             var Text_ = jsonData.choices[0].text;
+
                                             dataReceivedTillNow += Text_;
                                             tempContext_ += Text_;
                                             answerContext_ += Text_;
@@ -113,8 +113,7 @@ export default function getAnswer(prompt = '', contexts = [], obj = {
                                         //Check if DONE is received 
                                         if (chunkVal_.trim() == "[DONE]") {
                                             // console.log("Finished Loading")
-                                        }
-                                        else {
+                                        } else {
                                             console.log("Error Occured!!!!", err, "Value Data =>", chunkVal_, "<=");
                                         }
                                     }

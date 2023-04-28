@@ -130,12 +130,20 @@ export default {
             this.list.push(mg.msg);
             mg.loading();
 
+            this.$nextTick(() => {
+                // 滚动到最新回答
+                this.scrollToBottom();
+            });
+
             getAnswer(this.question, contexts, {
                 success: content => {
                     mg.updateAnswer(content);
                 },
                 error: err => {
                     mg.updateAnswer(`错误：${err}`);
+
+                    // 将失败的问题重新存入问题框
+                    this.question = mg.question;
                 },
                 complete: () => {
                     this.loading = false;
@@ -143,6 +151,15 @@ export default {
             });
 
             this.question = '';
+        },
+        // 滚动到最新回答
+        scrollToBottom() {
+            var ans = document.querySelectorAll('.chat-row.a'),
+                last = ans[ans.length - 1];
+
+            last.scrollIntoView({
+                behavior: 'smooth',
+            });
         },
     },
     mounted() {
