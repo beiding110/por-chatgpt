@@ -143,7 +143,7 @@ export default {
                     mg.updateAnswer(`错误：${err}`);
 
                     // 将失败的问题重新存入问题框
-                    this.question = mg.question;
+                    this.question = mg.msg.question;
                 },
                 complete: () => {
                     this.loading = false;
