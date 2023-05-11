@@ -6,7 +6,7 @@ class MsgPop {
 
         this.msg = {
             addtime,
-            question,
+            question: this._contentFilter(question),
             answer: '',
         };
     }
@@ -14,7 +14,7 @@ class MsgPop {
     updateAnswer(content) {
         this.stopTimer();
 
-        this.msg.answer = content;
+        this.msg.answer = this._contentFilter(content);
     }
 
     get() {
@@ -50,6 +50,20 @@ class MsgPop {
         this.timer = null;
 
         cb && cb();
+    }
+
+    // 格式化问题及回答
+    _contentFilter(str) {
+        var res = '';
+
+        if (!str) {
+            return '';
+        }
+
+        // 替换\n
+        res = str.replace(/\n/ig, '<br/>');
+
+        return res;
     }
 }
 

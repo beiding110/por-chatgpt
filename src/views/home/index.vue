@@ -11,18 +11,20 @@
                     v-if="item.question"
                     class="chat-row q"
                     >
-                        <div class="pop">
-                            {{item.question}}
-                        </div>
+                        <div 
+                            class="pop" 
+                            v-html="item.question"
+                        ></div>
                     </div>
 
                     <div 
                     v-if="item.answer"
                     class="chat-row a"
                     >
-                        <div class="pop">
-                            {{item.answer}}
-                        </div>
+                        <div 
+                            class="pop"
+                            v-html="item.answer"
+                        ></div>
                     </div>
                 </div>
             </div>
