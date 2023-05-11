@@ -13,7 +13,7 @@
                     >
                         <div 
                             class="pop" 
-                            v-html="item.question"
+                            v-html="contentFilter(item.question)"
                         ></div>
                     </div>
 
@@ -23,7 +23,7 @@
                     >
                         <div 
                             class="pop"
-                            v-html="item.answer"
+                            v-html="contentFilter(item.answer)"
                         ></div>
                     </div>
                 </div>
@@ -162,6 +162,19 @@ export default {
             last.scrollIntoView({
                 behavior: 'smooth',
             });
+        },
+        // 格式化问题及回答
+        contentFilter(str) {
+            var res = '';
+
+            if (!str) {
+                return '';
+            }
+
+            // 替换\n
+            res = str.replace(/\n/ig, '<br/>');
+
+            return res;
         },
     },
     mounted() {
