@@ -1,3 +1,4 @@
+import marked from 'marked';
 class MsgPop {
     constructor(question) {
         var addtime = new Date().pattern('yyyy/MM/dd hh:mm:ss');
@@ -5,37 +6,47 @@ class MsgPop {
         this.loadingText = '.';
 
         this.msg = {
-            addtime,
-            question,
-            answer: '',
+            addtime, // 提问时间
+            question, // 原问题
+            answer: '', // 原回答
+            questionHTML: question, // 格式化后的问题
+            answerHTML: '', // 格式化后的回答
         };
     }
 
+    /**
+     * 更新回答
+     * @param {String} content 回答内容
+     */
     updateAnswer(content) {
-        this.stopTimer();
+        this._stopTimer();
 
         this.msg.answer = content;
+        this.msg.answerHTML = marked.parse(content);
     }
 
     get() {
         return this.msg;
     }
 
+    /**
+     * 展示加载状态
+     */
     loading() {
-        this.startTimer(() => {
+        this._startTimer(() => {
             this.loadingText += '.';
 
             if (this.loadingText.length > 3) {
                 this.loadingText = '.';
             }
 
-            this.msg.answer = this.loadingText;
+            this.msg.answer = this.msg.answerHTML = this.loadingText;
         });
     }
 
-    startTimer(cb) {
+    _startTimer(cb) {
         if (this.timer) {
-            this.stopTimer();
+            this._stopTimer();
         }
 
         this.loadingText = '.';
@@ -45,7 +56,7 @@ class MsgPop {
         }, 500);
     }
 
-    stopTimer(cb) {
+    _stopTimer(cb) {
         clearInterval(this.timer);
         this.timer = null;
 

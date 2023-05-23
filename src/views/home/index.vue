@@ -13,7 +13,7 @@
                     >
                         <div 
                             class="pop" 
-                            v-html="contentFilter(item.question)"
+                            v-html="item.questionHTML"
                         ></div>
                     </div>
 
@@ -23,7 +23,7 @@
                     >
                         <div 
                             class="pop"
-                            v-html="contentFilter(item.answer)"
+                            v-html="item.answerHTML"
                         ></div>
                     </div>
                 </div>
@@ -109,16 +109,22 @@ export default {
             this.list = history;
         },
 
+        // 获取提问历史
         getContexts() {
             var list = this.list;
 
-            return list.map(item => {
+            // 过滤不需要发送的内容
+            // 获取历史记录作为上下文
+            return list.filter(item => {
+                return item.question;
+            }).map(item => {
                 return {
                     question: item.question,
                     answer: item.answer,
                 };
             });
         },
+        // 发送问题，获取回答
         queryAnswer() {
             if (!this.question) {
                 return;
@@ -132,12 +138,11 @@ export default {
             this.list.push(mg.msg);
             mg.loading();
 
-            this.$nextTick(() => {
-                // 滚动到最新回答
-                this.scrollToBottom();
-            });
-
             getAnswer(this.question, contexts, {
+                start: () => {
+                    // 滚动到最新回答
+                    this.scrollToBottom();
+                },
                 success: content => {
                     mg.updateAnswer(content);
                 },
@@ -162,19 +167,6 @@ export default {
             last.scrollIntoView({
                 behavior: 'smooth',
             });
-        },
-        // 格式化问题及回答
-        contentFilter(str) {
-            var res = '';
-
-            if (!str) {
-                return '';
-            }
-
-            // 替换\n
-            res = str.replace(/\n/ig, '<br/>');
-
-            return res;
         },
     },
     mounted() {
@@ -224,6 +216,7 @@ export default {
                     padding: .5em;
                     border-radius: .3em;
                     color: #232323;
+                    word-break: break-all;
                 }
 
                 &.q{
@@ -266,4 +259,53 @@ export default {
             }
         }
     }
+</style>
+
+<style lang="scss">
+.chat-row{
+    code{
+        display: block;
+        margin: 1em;
+        padding: 1em;
+        background: #282C34;
+        color: #ABB2BF;
+    }
+
+    $tableBorderColor: #DCDFE6;
+
+    table {
+        margin: 1em;
+        border-left: 1px solid $tableBorderColor;
+        border-top: 1px solid $tableBorderColor;
+
+        th, td {
+            padding: 0.5em;
+            border-right: 1px solid $tableBorderColor;
+            border-bottom: 1px solid $tableBorderColor;
+            box-sizing: border-box;
+        }
+    }
+
+    img{
+        margin: 1em;
+    }
+
+    ol {
+        margin: 1em;
+        padding-left: 2em;
+
+        li {
+            list-style: auto;
+        }
+    }
+
+    ul {
+        margin: 1em;
+        padding-left: 2em;
+
+        li {
+            list-style: auto;
+        }
+    }
+}
 </style>

@@ -6,6 +6,7 @@ import {
 } from '@/config/chatgpt.js';
 
 export default function getAnswer(prompt = '', contexts = [], obj = {
+    start: () => {},
     success: () => {}, 
     error: () => {}, 
     complete: () => {},
@@ -19,29 +20,29 @@ export default function getAnswer(prompt = '', contexts = [], obj = {
         body = {
             prompt,
             uId,
-            ideName: "Chrome",
+            ideName: 'Chrome',
             bitoUserId,
             email,
             requestId: QuesGUID,
             stream: true,
             context: [
                 {
-                    "question": "Hello, who are you?",
-                    "answer": "I am an AI created by Bito. How can I help you today?"
+                    'question': 'Hello, who are you?',
+                    'answer': 'I am an AI created by Bito. How can I help you today?'
                 },
                 ...contexts,
             ],
             sessionId: newSessionGUID
         },
         fetchOPt = {
-            method: "POST",
+            method: 'POST',
             headers: {
                 Authorization,
                 'Content-Type': 'application/json',
                 'X-ClientInfo': `Win32 Gecko 20030107#Chrome#3.0#${bitoUserId}`,
             },
             body: JSON.stringify(body),
-            redirect: "follow",
+            redirect: 'follow',
             // signal: {
             //     aborted: false,
             //     onabort: null,
@@ -49,10 +50,12 @@ export default function getAnswer(prompt = '', contexts = [], obj = {
             // },
         };
 
-    var tempContext_ = '';
-    var ctxToPassNew = [];
-    var chunkReciedMain = [];
-    var relString = "<<this0is1a2no3use4str5spliter>>";
+    var tempContext_ = '',
+        ctxToPassNew = [],
+        chunkReciedMain = [],
+        relString = "<<this0is1a2no3use4str5spliter>>";
+
+    obj?.start();
 
     fetch('https://bitoai.bito.co/ai/v2/chat/', fetchOPt)
         .then(response => {
@@ -86,9 +89,8 @@ export default function getAnswer(prompt = '', contexts = [], obj = {
                                 return;
                             }
 
-                            var valuedata = decoder.decode(value);
-
-                            var answerContext_ = '';
+                            var valuedata = decoder.decode(value),
+                                answerContext_ = '';
 
                             if (valuedata.startsWith('data:') || true) {
                                 chunkReciedMain.push(valuedata);
@@ -129,5 +131,10 @@ export default function getAnswer(prompt = '', contexts = [], obj = {
                     push();
                 },
             });
+        })
+        .catch(() => {
+            obj?.error('请求失败');
+
+            obj?.complete();
         });
 }
