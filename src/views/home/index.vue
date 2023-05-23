@@ -217,6 +217,7 @@ export default {
                     border-radius: .3em;
                     color: #232323;
                     word-break: break-all;
+                    overflow: hidden;
                 }
 
                 &.q{
@@ -269,6 +270,8 @@ export default {
         padding: 1em;
         background: #282C34;
         color: #ABB2BF;
+        white-space: pre-wrap;
+        box-sizing: border-box;
     }
 
     $tableBorderColor: #DCDFE6;
@@ -283,6 +286,7 @@ export default {
             border-right: 1px solid $tableBorderColor;
             border-bottom: 1px solid $tableBorderColor;
             box-sizing: border-box;
+            white-space: pre-wrap;
         }
     }
 
