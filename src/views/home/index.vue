@@ -2,66 +2,22 @@
     <div class="home">
         <div class="body">
             <div class="scroll-warpper">
-                <div 
-                v-for="(item, index) in list"
-                class="char-group"
-                :key="index"
-                >
-                    <div 
-                    v-if="item.question"
-                    class="chat-row q"
-                    >
-                        <div 
-                            class="pop" 
-                            v-html="item.questionHTML"
-                        ></div>
-                    </div>
-
-                    <div 
-                    v-if="item.answer"
-                    class="chat-row a"
-                    >
-                        <div 
-                            class="pop"
-                            v-html="item.answerHTML"
-                        ></div>
-                    </div>
-                </div>
+                <ChatGroup
+                    v-for="(item, index) in list"
+                    :key="index"
+                    :question="item.questionHTML"
+                    :answer="item.answerHTML"
+                ></ChatGroup>
             </div>
         </div>
 
         <div class="footer">
-            <div class="left">
-                <el-button 
-                    class="btn-submit"
-                    size="small"
-                    circle
-                    icon="el-icon-plus"
-                    :loading="loading"
-                    @click="togglePanel"
-                ></el-button>
-            </div>
-
-            <div class="center">
-                <el-input 
-                    class="input"
-                    v-model="question"
-                    type="textarea"
-                    :autosize="{minRows: 1, maxRows: 6}"
-                    @keydown.enter="queryAnswer"
-                ></el-input>
-            </div>
-
-            <div class="right">
-                <el-button 
-                    class="btn-submit"
-                    type="success" 
-                    size="small"
-                    icon="el-icon-s-promotion"
-                    :loading="loading"
-                    @click="queryAnswer"
-                ></el-button>
-            </div>
+            <ToolBar
+                v-model="question"
+                :loading="loading"
+                @click="togglePanel"
+                @submit="queryAnswer"
+            ></ToolBar>
         </div>
 
         <Panel 
@@ -81,11 +37,15 @@
 import MsgGroup from './js/MsgGroup.js';
 import getAnswer from './js/getAnswer.js';
 
+import ChatGroup from './components/chat-group.vue';
+import ToolBar from './components/tool-bar.vue';
 import Panel from './components/panel.vue';
 import DrawerScene from './components/drawer-scene.vue';
 
 export default {
     components: {
+        ChatGroup,
+        ToolBar,
         Panel,
         DrawerScene,
     },
@@ -195,121 +155,10 @@ export default {
             .scroll-warpper{
                 padding: 1em;
             }
-
-            .chat-row{
-                display: flex;
-                font-size: 1em;
-                padding: .5em 0;
-
-                &.q{
-                    justify-content: end;
-                    padding-left: 1em;
-                }
-
-                &.a{
-                    justify-content: start;
-                    padding-right: 1em;
-                }
-
-                .pop{
-                    background: white;
-                    padding: .5em;
-                    border-radius: .3em;
-                    color: #232323;
-                    word-break: break-all;
-                    overflow: hidden;
-                }
-
-                &.q{
-                    .pop{
-                        background: #95EC69;
-                    }
-                }
-            }
         }
 
         .footer{
-            display: flex;
-            padding: .5em;
-
-            .left{
-                display: flex;
-                align-items: center;
-                margin-right: .5em;
-            }
-
-            .center{
-                flex: 1;
-                display: flex;
-                align-items: center;
-                
-                .input{
-                    
-                }
-            }
-
-            .right{
-                display: flex;
-                align-items: center;
-                margin-left: .5em;
-
-                .btn-submit{
-                    height: 100%;
-                    box-sizing: border-box;
-                }
-            }
+            
         }
     }
-</style>
-
-<style lang="scss">
-.chat-row{
-    code{
-        display: block;
-        margin: 1em;
-        padding: 1em;
-        background: #282C34;
-        color: #ABB2BF;
-        white-space: pre-wrap;
-        box-sizing: border-box;
-    }
-
-    $tableBorderColor: #DCDFE6;
-
-    table {
-        margin: 1em;
-        border-left: 1px solid $tableBorderColor;
-        border-top: 1px solid $tableBorderColor;
-
-        th, td {
-            padding: 0.5em;
-            border-right: 1px solid $tableBorderColor;
-            border-bottom: 1px solid $tableBorderColor;
-            box-sizing: border-box;
-            white-space: pre-wrap;
-        }
-    }
-
-    img{
-        margin: 1em;
-    }
-
-    ol {
-        margin: 1em;
-        padding-left: 2em;
-
-        li {
-            list-style: auto;
-        }
-    }
-
-    ul {
-        margin: 1em;
-        padding-left: 2em;
-
-        li {
-            list-style: auto;
-        }
-    }
-}
 </style>
