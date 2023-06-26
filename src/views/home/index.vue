@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import chatScene from './js/chatScene.js';
 import MsgGroup from './js/MsgGroup.js';
 import getAnswer from './js/getAnswer.js';
 
@@ -53,9 +54,9 @@ export default {
         return {
             question: '',
 
-            list: [],
-
             loading: false,
+
+            list: chatScene._list,
         };
     },
     methods: {
@@ -66,23 +67,7 @@ export default {
             this.$refs.DrawerScene.open();
         },
         shiftSceneHandler(history) {
-            this.list = history;
-        },
-
-        // 获取提问历史
-        getContexts() {
-            var list = this.list;
-
-            // 过滤不需要发送的内容
-            // 获取历史记录作为上下文
-            return list.filter(item => {
-                return item.question;
-            }).map(item => {
-                return {
-                    question: item.question,
-                    answer: item.answer,
-                };
-            });
+            this.list = chatScene.load(history);
         },
         // 发送问题，获取回答
         queryAnswer() {
@@ -92,10 +77,11 @@ export default {
 
             this.loading = true;
 
-            var contexts = this.getContexts(),
+            var contexts = chatScene.getContexts(),
                 mg = new MsgGroup(this.question);
 
-            this.list.push(mg.msg);
+            chatScene.add(mg.msg);
+
             mg.loading();
 
             getAnswer(this.question, contexts, {
@@ -130,10 +116,7 @@ export default {
         },
     },
     mounted() {
-        var placeholder = new MsgGroup('');
-
-        placeholder.updateAnswer('Por\'s chatgpt. Powered by Bito.');
-        this.list.push(placeholder.msg);
+        
     },
 };
 </script>
