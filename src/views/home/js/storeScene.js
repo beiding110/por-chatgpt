@@ -6,15 +6,16 @@ export function getScene() {
     return res;
 }
 
-export function getSceneByName(name) {
-    var res = getScene();
+export function getSceneBy(key = 'name', value) {
+    var res = getScene(),
+        r;
 
-    if (!name) {
+    if (!value) {
         return res;
     }
 
-    var r = res.find(item => {
-        return item.name === name;
+    r = res.find(item => {
+        return item[key] === value;
     });
 
     if (!r) {
@@ -24,31 +25,34 @@ export function getSceneByName(name) {
     return r.history;
 }
 
-export function updateScene(name, value) {
-    var scene = getScene(name),
+export function updateSceneBy(key = 'name', value, data) {
+    var scene = getScene(),
         targetIndex = scene.findIndex(item => {
-            return item.name === name;
+            return item[key] === value;
         });
 
     if (!~targetIndex) {
-        let newItem = {
-            name,
-            history: value,
-            id: new Date().getTime(),
-        };
+        let time = new Date().getTime(),
+            newItem = {
+                name: `场景-${time}`,
+                history: data,
+                id: time,
+            };
+        
+        newItem[key] = value;
 
         scene.push(newItem);
     } else {
-        scene[targetIndex].history = value;
+        scene[targetIndex].history = data;
     }
 
     setLocal(KEY_NAME, scene);
 }
 
-export function delSceneByName(name) {
-    var scene = getScene(name),
+export function delSceneBy(key, value) {
+    var scene = getScene(),
         targetIndex = scene.findIndex(item => {
-            return item.name === name;
+            return item[key] === value;
         });
 
     if (~targetIndex) {

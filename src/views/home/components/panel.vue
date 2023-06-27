@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {updateScene, getSceneByName} from '../js/storeScene.js';
+import {updateSceneBy} from '../js/storeScene.js';
 
 export default {
     props: {
@@ -52,7 +52,7 @@ export default {
                                 return true;
                             }
                         }).then(({ value }) => {
-                            updateScene(value, this.data);
+                            updateSceneBy('name', value, this.data);
                         });
 
                         this.toggleShow();

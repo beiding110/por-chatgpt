@@ -66,8 +66,12 @@ export default {
         openDrawerScene() {
             this.$refs.DrawerScene.open();
         },
-        shiftSceneHandler(history) {
-            this.list = chatScene.load(history);
+        shiftSceneHandler(sceneItem) {
+            this.list = chatScene.load(sceneItem);
+
+            this.$nextTick(() => {
+                this.scrollToBottom();
+            });
         },
         // 发送问题，获取回答
         queryAnswer() {
@@ -100,6 +104,8 @@ export default {
                 },
                 complete: () => {
                     this.loading = false;
+
+                    chatScene.save();
                 },
             });
 
@@ -107,16 +113,16 @@ export default {
         },
         // 滚动到最新回答
         scrollToBottom() {
-            var ans = document.querySelectorAll('.chat-row.a'),
-                last = ans[ans.length - 1];
+            var scroller = document.querySelector('.scroll-warpper'),
+                sHeight = scroller.clientHeight,
+                scrollCon = document.querySelector('.body'),
+                cHeight = scrollCon.clientHeight;
 
-            last.scrollIntoView({
-                behavior: 'smooth',
-            });
+            scrollCon.scrollTo(0, sHeight + cHeight);
         },
     },
     mounted() {
-        
+        this.scrollToBottom();
     },
 };
 </script>

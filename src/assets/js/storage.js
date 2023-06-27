@@ -12,14 +12,27 @@ function getStorage(type, key) {
     var storageKey = `${NAME_SPACE}${key}`,
         storageData = window[type][storageKey];
 
-    var res = key 
-    ? storageData 
-        ? ((/{|}|%7B|%7D|\[|\]|%5B|%5D/.test(storageData) 
-            ? JSON.parse(unescape(storageData)) 
-            : unescape(storageData))) 
-        : undefined 
-    : window[type];
-    return res || false;
+    if (key) {
+        if (!storageData) {
+            return false;
+        }
+
+        let obj = JSON.parse(storageData);
+
+        return obj.value;
+    }
+
+    let data = window[type];
+
+    var res = Object.keys(data).reduce((obj, sKey) => {
+        let sv = window[type][sKey];
+
+        sv = JSON.parse(sv);
+
+        obj[sKey] = sv.value;
+    }, {});
+
+    return res;
 }
 /**
  * 获取storage基方法
@@ -29,17 +42,32 @@ function getStorage(type, key) {
  */
 function setStorage(type, key, value) {
     if (typeof key === 'string') {
-        window[type][`${NAME_SPACE}${key}`] = (typeof value === 'object') 
-            ? escape(JSON.stringify(value)) 
-            : escape(value);
+        let sType = getType(value),
+            sValue = value,
+            obj;
+
+        obj = {
+            type: sType,
+            value: sValue,
+        };
+
+        window[type][`${NAME_SPACE}${key}`] = JSON.stringify(obj);
     } else if (typeof key === 'object') {
         Object.keys(key).forEach(function (item) {
-            var value = key[item];
-            window[type][`${NAME_SPACE}${item}`] = (typeof value === 'object') 
-                ? escape(JSON.stringify(value)) 
-                : escape(value);
+            let val = key[item],
+                sType = getType(val),
+                sValue = val,
+                obj;
+                
+            obj = {
+                type: sType,
+                value: sValue,
+            };
+    
+            window[type][`${NAME_SPACE}${item}`] = JSON.stringify(obj);
         });
-    };
+    }
+
     return window[type];
 }
 

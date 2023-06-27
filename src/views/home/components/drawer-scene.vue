@@ -64,7 +64,7 @@ export default {
             return `#${color}`;
         },
         shiftScene(item) {
-            this.$emit('shift', item.history);
+            this.$emit('shift', item);
 
             this.close();
         },

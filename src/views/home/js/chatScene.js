@@ -1,10 +1,22 @@
 import MsgGroup from './MsgGroup.js';
+import {getScene as getProvisionalScene, updateScene as updateProvisionalScene} from './storeSceneProvisional.js';
+import {updateSceneBy as updateSceneTableBy} from '../js/storeScene.js';
 
 class ChatScene {
     constructor() {
+        this._id = '';
         this._list = [];
 
-        this.create();
+        // 获取上次操作中的场景
+        var pScene = getProvisionalScene();
+
+        if (pScene) {
+            // 有就加载
+            this.load(pScene);
+        } else {
+            // 没有就创建新的
+            this.create();
+        }
     }
 
     /**
@@ -12,6 +24,7 @@ class ChatScene {
      * @returns 创建后的场景list
      */
     create() {
+        this._id = '';
         this._list = [];
 
         var placeholder = new MsgGroup('');
@@ -20,16 +33,24 @@ class ChatScene {
 
         this.add(placeholder.msg);
 
+        // 更新存储数据
+        this.save();
+
         return this._list;
     }
 
     /**
      * 加载历史记录
-     * @param {Array} history 历史记录
+     * @param {Object} sceneItem 场景实例
      * @returns 挂载后的数据
      */
-    load(history) {
+    load(sceneItem) {
+        var {history, id} = sceneItem;
+
         this._list = history;
+        this._id = id;
+
+        updateProvisionalScene(history, id);
 
         return this._list;
     }
@@ -59,6 +80,19 @@ class ChatScene {
                 answer: item.answer,
             };
         });
+    }
+
+    /**
+     * 缓存当前场景
+     */
+    save() {
+        // 更新临时存储
+        updateProvisionalScene(this._list);
+
+        // 更新场景表中对应的数据
+        if (this._id) {
+            updateSceneTableBy('id', this._id, this._list);
+        }
     }
 }
 
