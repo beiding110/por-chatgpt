@@ -17,7 +17,7 @@
                 v-model="model"
                 type="textarea"
                 :autosize="{minRows: 1, maxRows: 6}"
-                @keydown.enter="submitHandler"
+                @keydown.enter.prevent.native="submitHandler"
             ></el-input>
         </div>
 
