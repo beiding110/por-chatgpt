@@ -23,6 +23,7 @@
         <Panel 
             ref="panel"
             :data.sync="list"
+            @createNew="createNewScene"
             @shiftScene="openDrawerScene"
         ></Panel>
 
@@ -72,6 +73,9 @@ export default {
             this.$nextTick(() => {
                 this.scrollToBottom();
             });
+        },
+        createNewScene() {
+            this.list = chatScene.create();
         },
         // 发送问题，获取回答
         queryAnswer() {

@@ -38,6 +38,15 @@ export default {
 
             list: [
                 {
+                    title: '新建空场景',
+                    icon: 'el-icon-plus',
+                    handler: () => {
+                        this.$emit('createNew');
+
+                        this.toggleShow();
+                    },
+                },
+                {
                     title: '保存为场景',
                     icon: 'el-icon-folder-checked',
                     handler: () => {
