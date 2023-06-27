@@ -1,4 +1,14 @@
 import marked from 'marked';
+
+/**
+ * @typedef {Object} msgGroup 一组问答
+ * @property {number} addtime - 添加时间
+ * @property {string} answer - 回答原文，md格式
+ * @property {string} answerHTML - 回答html字符串
+ * @property {string} question - 提问原文
+ * @property {string} questionHTML - 提问html字符串
+ */
+
 class MsgPop {
     constructor(question) {
         var addtime = new Date().pattern('yyyy/MM/dd hh:mm:ss');
@@ -13,6 +23,9 @@ class MsgPop {
             answerHTML: '', // 格式化后的回答
         };
     }
+
+    /**@type {msgGroup} */
+    msg = {}
 
     /**
      * 更新回答

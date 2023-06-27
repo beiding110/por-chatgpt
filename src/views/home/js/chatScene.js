@@ -2,6 +2,17 @@ import MsgGroup from './MsgGroup.js';
 import {getScene as getProvisionalScene, updateScene as updateProvisionalScene} from './storeSceneProvisional.js';
 import {updateSceneBy as updateSceneTableBy} from '../js/storeScene.js';
 
+/**
+ * @typedef {import('./MsgGroup.js').msgGroup[]} historyList 聊天历史
+ */
+
+/**
+ * @typedef {Object} sceneItem 一组对话
+ * @property {number} id - 编号
+ * @property {string} name - 对话名称
+ * @property {historyList} history - 聊天记录
+ */
+
 class ChatScene {
     constructor() {
         this._id = '';
@@ -18,6 +29,9 @@ class ChatScene {
             this.create();
         }
     }
+
+    /**@type {historyList} */
+    _list = []
 
     /**
      * 创建空场景
@@ -41,7 +55,7 @@ class ChatScene {
 
     /**
      * 加载历史记录
-     * @param {Object} sceneItem 场景实例
+     * @param {sceneItem} sceneItem 场景实例
      * @returns 挂载后的数据
      */
     load(sceneItem) {
@@ -57,7 +71,7 @@ class ChatScene {
 
     /**
      * 增加一段对话
-     * @param {Object} msg 对话对象
+     * @param {import('./MsgGroup.js').msgGroup} msg 对话对象
      */
     add(msg) {
         this._list.push(msg);
