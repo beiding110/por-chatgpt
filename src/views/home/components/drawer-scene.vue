@@ -1,6 +1,6 @@
 <template>
     <el-drawer
-    title="场景"
+    title="全部对话"
     :visible.sync="visibleController"
     direction="rtl"
     :size="250"

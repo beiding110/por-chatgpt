@@ -38,7 +38,7 @@ export default {
 
             list: [
                 {
-                    title: '新建空场景',
+                    title: '新建空对话',
                     icon: 'el-icon-plus',
                     handler: () => {
                         this.$emit('createNew');
@@ -47,15 +47,15 @@ export default {
                     },
                 },
                 {
-                    title: '保存为场景',
+                    title: '对话保存为',
                     icon: 'el-icon-folder-checked',
                     handler: () => {
-                        this.$prompt('场景名称', '提示', {
+                        this.$prompt('对话名称', '提示', {
                             confirmButtonText: '创建',
                             cancelButtonText: '取消',
                             inputValidator(val) {
                                 if (!val) {
-                                    return '请输入场景名称';
+                                    return '请输入对话名称';
                                 }
 
                                 return true;
@@ -68,7 +68,7 @@ export default {
                     },
                 },
                 {
-                    title: '切换场景',
+                    title: '切换对话',
                     icon: 'el-icon-refresh',
                     handler: () => {
                         this.$emit('shiftScene');

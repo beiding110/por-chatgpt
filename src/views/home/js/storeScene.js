@@ -34,7 +34,7 @@ export function updateSceneBy(key = 'name', value, data) {
     if (!~targetIndex) {
         let time = new Date().getTime(),
             newItem = {
-                name: `场景-${time}`,
+                name: `对话-${time}`,
                 history: data,
                 id: time,
             };
