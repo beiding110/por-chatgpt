@@ -29,7 +29,8 @@ export function updateSceneBy(key = 'name', value, data) {
     var scene = getScene(),
         targetIndex = scene.findIndex(item => {
             return item[key] === value;
-        });
+        }),
+        res;
 
     if (!~targetIndex) {
         let time = new Date().getTime(),
@@ -42,11 +43,17 @@ export function updateSceneBy(key = 'name', value, data) {
         newItem[key] = value;
 
         scene.push(newItem);
+
+        res = newItem;
     } else {
         scene[targetIndex].history = data;
+
+        res = scene[targetIndex];
     }
 
     setLocal(KEY_NAME, scene);
+
+    return res;
 }
 
 export function delSceneBy(key, value) {

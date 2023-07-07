@@ -1,6 +1,9 @@
 <template>
     <div class="tool-bar">
-        <div class="left">
+        <div 
+        v-if="showLeft"
+        class="left"
+        >
             <el-button 
                 class="btn-submit"
                 size="small"
@@ -47,6 +50,10 @@ export default {
         value: {
             type: String,
             default: '',
+        },
+        showLeft: {
+            type: Boolean,
+            default: true,
         },
     },
     methods: {

@@ -16,6 +16,8 @@ import {updateSceneBy as updateSceneTableBy} from '../js/storeScene.js';
 class ChatScene {
     constructor() {
         this._id = '';
+
+        /**@type {historyList} */
         this._list = [];
 
         // 获取上次操作中的场景
@@ -29,9 +31,6 @@ class ChatScene {
             this.create();
         }
     }
-
-    /**@type {historyList} */
-    _list = []
 
     /**
      * 创建空场景
@@ -106,6 +105,20 @@ class ChatScene {
         // 更新场景表中对应的数据
         if (this._id) {
             updateSceneTableBy('id', this._id, this._list);
+        }
+    }
+
+    bindId(id) {
+        this._id = id;
+
+        updateProvisionalScene(this._list, id);
+    }
+
+    deBindId(id) {
+        if (this._id === id) {
+            this._id = '';
+
+            updateProvisionalScene(this._list, '');
         }
     }
 }

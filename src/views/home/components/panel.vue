@@ -61,7 +61,9 @@ export default {
                                 return true;
                             }
                         }).then(({ value }) => {
-                            updateSceneBy('name', value, this.data);
+                            var data = updateSceneBy('name', value, this.data);
+
+                            this.$emit('save', data);
                         });
 
                         this.toggleShow();

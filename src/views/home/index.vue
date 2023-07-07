@@ -1,36 +1,50 @@
 <template>
-    <div class="home">
-        <div class="body">
-            <div class="scroll-warpper">
-                <ChatGroup
-                    v-for="(item, index) in list"
-                    :key="index"
-                    :question="item.questionHTML"
-                    :answer="item.answerHTML"
-                ></ChatGroup>
-            </div>
-        </div>
-
-        <div class="footer">
-            <ToolBar
-                v-model="question"
-                :loading="loading"
-                @click="togglePanel"
-                @submit="queryAnswer"
-            ></ToolBar>
-        </div>
-
-        <Panel 
-            ref="panel"
+    <div class="layout">
+        <Sidebar
+            v-if="!isMobile"
             :data.sync="list"
-            @createNew="createNewScene"
-            @shiftScene="openDrawerScene"
-        ></Panel>
-
-        <DrawerScene
-            ref="DrawerScene"
             @shift="shiftSceneHandler"
-        ></DrawerScene>
+            @del="delSceneHandler"
+            @save="saveScene"
+            @createNew="createNewScene"
+        ></Sidebar>
+
+        <div class="main">
+            <div class="body">
+                <div class="scroll-warpper">
+                    <ChatGroup
+                        v-for="(item, index) in list"
+                        :key="index"
+                        :question="item.questionHTML"
+                        :answer="item.answerHTML"
+                    ></ChatGroup>
+                </div>
+            </div>
+
+            <div class="footer">
+                <ToolBar
+                    v-model="question"
+                    :loading="loading"
+                    :showLeft="isMobile"
+                    @click="togglePanel"
+                    @submit="queryAnswer"
+                ></ToolBar>
+            </div>
+
+            <Panel 
+                ref="panel"
+                :data.sync="list"
+                @save="saveScene"
+                @createNew="createNewScene"
+                @shiftScene="openDrawerScene"
+            ></Panel>
+
+            <DrawerScene
+                ref="DrawerScene"
+                @shift="shiftSceneHandler"
+                @del="delSceneHandler"
+            ></DrawerScene>
+        </div>
     </div>
 </template>
 
@@ -44,15 +58,21 @@ import ToolBar from './components/tool-bar.vue';
 import Panel from './components/panel.vue';
 import DrawerScene from './components/drawer-scene.vue';
 
+import Sidebar from './components/pc/sidebar.vue';
+
 export default {
     components: {
         ChatGroup,
         ToolBar,
         Panel,
         DrawerScene,
+
+        Sidebar,
     },
     data() {
         return {
+            isMobile: false,
+
             question: '',
 
             loading: false,
@@ -115,15 +135,29 @@ export default {
 
             this.question = '';
         },
+        // 场景保存完毕
+        saveScene(data) {
+            var {id} = data;
+
+            chatScene.bindId(id);
+
+            this.$store.dispatch('scene/queryScene');
+        },
+        delSceneHandler(id) {
+            chatScene.deBindId(id);
+        },
         // 滚动到最新回答
         scrollToBottom() {
-            var scroller = document.querySelector('.scroll-warpper'),
+            var scroller = document.querySelector('.main .body .scroll-warpper'),
                 sHeight = scroller.clientHeight,
-                scrollCon = document.querySelector('.body'),
+                scrollCon = document.querySelector('.main .body'),
                 cHeight = scrollCon.clientHeight;
 
             scrollCon.scrollTo(0, sHeight + cHeight);
         },
+    },
+    created() {
+        this.isMobile = isMobile();
     },
     mounted() {
         this.scrollToBottom();
@@ -132,12 +166,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .home{
+.layout{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+
+    .main{
+        flex: 1;
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: 100%;
-        font-size: 14px;
 
         .body{
             flex: 1;
@@ -154,4 +193,5 @@ export default {
             
         }
     }
+}
 </style>
