@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {getScene, delSceneByName} from '../js/storeScene.js';
+import {getScene, delSceneBy} from '../js/storeScene.js';
 
 export default {
     data() {
@@ -48,7 +48,7 @@ export default {
         },
         delHandler(item, index) {
             showConfirm('确认删除', 'warning', () => {
-                delSceneByName(item.name);
+                delSceneBy('name', item.name);
 
                 this.list.splice(index, 1);
             });
