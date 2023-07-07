@@ -2,7 +2,7 @@
     <div class="sidebar">
         <div class="header">
             <div class="logo">
-                <img src="/config/logo.png" alt="">
+                <img src="config/logo.png" alt="">
 
                 <div class="text">
                     por-chatgpt
