@@ -39,7 +39,7 @@ export default function getAnswer(prompt = '', contexts = [], obj = {
             headers: {
                 Authorization,
                 'Content-Type': 'application/json',
-                'X-ClientInfo': `Win32 Gecko 20030107#Chrome#3.0#${bitoUserId}`,
+                'X-ClientInfo': `Win32 Gecko 20030107#Chrome#3.3#${uId}#Chrome`,
             },
             body: JSON.stringify(body),
             redirect: 'follow',
@@ -57,7 +57,7 @@ export default function getAnswer(prompt = '', contexts = [], obj = {
 
     obj?.start();
 
-    fetch('https://bitoai.bito.co/ai/v2/chat/', fetchOPt)
+    fetch('http://bitoai.bito.co/ai/v2/chat/', fetchOPt)
         .then(response => {
             if (!response.ok) {
                 response.text().then(res => {
@@ -132,7 +132,9 @@ export default function getAnswer(prompt = '', contexts = [], obj = {
                 },
             });
         })
-        .catch(() => {
+        .catch((e) => {
+            console.error(e);
+
             obj?.error('请求失败');
 
             obj?.complete();
