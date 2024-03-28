@@ -78,16 +78,17 @@ class ChatScene {
 
     /**
      * 获取提问历史
+     * @param {Number} length 历史长度
      * @returns 格式化的提问历史
      */
-    getContexts() {
+    getContexts(length = 6) {
         var list = this._list;
 
         // 过滤不需要发送的内容
         // 获取历史记录作为上下文
         return list.filter(item => {
             return item.question;
-        }).map(item => {
+        }).slice(-1 * length).map(item => {
             return {
                 question: item.question,
                 answer: item.answer,
